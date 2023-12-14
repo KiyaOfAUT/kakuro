@@ -19,10 +19,10 @@ class Agent:
         hold_state = stack[0]
         while stack:
             hold_state = stack.pop()
-            # os.system('cls' if os.name == 'nt' else 'clear')
-            # hold_state.print_board()
-            # print()
-            # time.sleep(0.1)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            hold_state.print_board()
+            print()
+            time.sleep(0.1)
             if hold_state.win():
                 print("solved:")
                 hold_state.print_board()
@@ -36,6 +36,10 @@ class Agent:
                                 hold_ = self.new_state(hold_state.num_matrix, hold_state.size, i, k)
                                 if hold_.constraint_satisfied():
                                     stack.append(hold_)
+                        break
+                    # if i[0] == 6 and i[1] == 1:
+                    #     print(self.is_empty(i, hold_state))
+                    #     input("?")
         print("unable to solve!")
 
     def new_state(self, matrix, size, rule, set_):
@@ -54,6 +58,7 @@ class Agent:
             for i in set_:
                 new_board.num_matrix[rule[0] + d][rule[1]] = i
                 d += 1
+        # new_board.print_board()
         return new_board
 
     def find_combinations(self, n, m):

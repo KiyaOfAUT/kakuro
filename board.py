@@ -91,6 +91,8 @@ class Board:
                 return False
             if sum_ == k and zero_flag:
                 return False
+            if not zero_flag and sum_ < k:
+                return False
         return True
 
     def insert_new_cell_number(self, row, col, value):
