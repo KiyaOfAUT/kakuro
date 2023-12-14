@@ -8,8 +8,11 @@ from itertools import permutations
 
 class Agent:
     def __init__(self, size, closed, rules):
-        self.rules = sorted(rules, key=lambda x: (x[0], x[1]))
+        hold_rules = []
         self.board_ = Board(size, closed, rules)
+        for (i, j, t, k) in rules:
+            hold_rules.append((i, j, t, k, self.length((i, j, t, k))))
+        self.rules = sorted(hold_rules, key=lambda x: (x[4], x[0], x[1]))
         self.result = []
 
     def solve(self):
