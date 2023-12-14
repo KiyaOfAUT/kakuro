@@ -3,17 +3,13 @@ from smart_agent import Agent
 
 
 def parse_input(rule_input):
-    try:
-        rule_list = []
-        for rule in rule_input:
-            y, x, z, t = map(int, rule.split(','))
-            if t not in [1, 2]:
-                raise ValueError("Invalid orientation value. Please use 1 for horizontal or 2 for vertical.")
-            rule_list.append((y, x, z, t))
-        return rule_list
-    except ValueError as e:
-        print(f"Error: {e}")
-        return []
+    rule_list = []
+    for rule in rule_input:
+        y, x, z, t = map(int, rule.split(','))
+        if t not in [1, 2]:
+            raise ValueError("Invalid orientation value. Please use 1 for horizontal or 2 for vertical.")
+        rule_list.append((y, x, z, t))
+    return rule_list
 
 
 def get_input(prompt):

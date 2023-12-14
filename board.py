@@ -3,15 +3,15 @@ import numpy as np
 
 class Board:
     def __init__(self, size, closed_cells, rule_cells):
-            self.rules = rule_cells
-            self.closed = closed_cells
-            self.size = size
-            hold_matrix = [[0 for _ in range(size)] for _ in range(size)]
-            self.num_matrix = np.array(hold_matrix)
-            for (i, j, k, z) in rule_cells:
-                self.num_matrix[i][j] -= 1
-            for (i, j) in closed_cells:
-                self.num_matrix[i][j] = -3
+        self.rules = rule_cells
+        self.closed = closed_cells
+        self.size = size
+        hold_matrix = [[0 for _ in range(size)] for _ in range(size)]
+        self.num_matrix = np.array(hold_matrix)
+        for (i, j, k, z) in rule_cells:
+            self.num_matrix[i][j] -= 1
+        for (i, j) in closed_cells:
+            self.num_matrix[i][j] = -3
 
     def win(self):
         if not self.constraint_satisfied():
@@ -49,6 +49,7 @@ class Board:
     def constraint_satisfied(self):
         count = 0
         for (i, j, k, t) in self.rules:
+            zero_flag = False
             count += 1
             sum_ = 0
             set_ = set()
@@ -64,12 +65,14 @@ class Board:
                         if hold_ > 0:
                             sum_ += hold_
                             set_.add(hold_)
+                        if hold_ == 0:
+                            zero_flag = True
                         d += 1
                         if j + d >= self.size:
                             break
             elif t == 2:
                 d = 1
-                if j + d < self.size:
+                if i + d < self.size:
                     while self.num_matrix[i + d][j] >= 0:
                         hold_ = self.num_matrix[i + d][j]
                         if hold_ > 9:
@@ -79,10 +82,14 @@ class Board:
                         if hold_ > 0:
                             sum_ += hold_
                             set_.add(hold_)
+                        if hold_ == 0:
+                            zero_flag = True
                         d += 1
-                        if i + d < self.size:
+                        if i + d >= self.size:
                             break
             if sum_ > k:
+                return False
+            if sum_ == k and zero_flag:
                 return False
         return True
 
@@ -114,7 +121,7 @@ class Board:
                     hold = [0, 0]
                     for (x, y, k, t) in self.rules:
                         if x == i and y == j:
-                            hold[t-1] = int(k)
+                            hold[t - 1] = int(k)
                     print(f" {hold[1]}\\{hold[0]}", end="")
                 elif self.num_matrix[i][j] == -1:
                     for (x, y, k, t) in self.rules:
@@ -126,4 +133,3 @@ class Board:
                 else:
                     print(" ", self.num_matrix[i][j], end=" ")
             print()
-
