@@ -20,12 +20,9 @@ class Agent:
         hold_state = stack[0]
         while stack:
             hold_state = stack.pop()
-            os.system('cls' if os.name == 'nt' else 'clear')
-            hold_state.print_board()
-            print()
-            time.sleep(0.1)
             if hold_state.win():
-                print("solved:")
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print("\033[92mSolved:\033[0m")
                 hold_state.print_board()
                 return
             if hold_state.constraint_satisfied():
