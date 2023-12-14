@@ -11,13 +11,13 @@ class Agent:
         self.rules = sorted(rules, key=lambda x: (x[0], x[1]))
         self.board_ = Board(size, closed, rules)
         self.result = []
+        self.count = 0
 
     def solve(self):
         self.backtrack()
 
     def backtrack(self):
         stack = [self.board_]
-        hold_state = stack[0]
         while stack:
             hold_state = stack.pop()
             if hold_state.win():
@@ -26,6 +26,7 @@ class Agent:
                 hold_state.print_board()
                 return
             if hold_state.constraint_satisfied():
+                self.count += 1
                 for i in self.rules:
                     if self.is_empty(i, hold_state):
                         for j in self.find_combinations(self.length(i), i[2]):
@@ -35,7 +36,7 @@ class Agent:
                                 if hold_.constraint_satisfied():
                                     stack.append(hold_)
                         break
-        print("unable to solve!")
+        print(self.count, "unable to solve!")
 
     def new_state(self, matrix, size, rule, set_):
         d = 1
