@@ -8,6 +8,7 @@ from itertools import permutations
 
 class Agent:
     def __init__(self, size, closed, rules):
+        self.rules = sorted(rules, key=lambda x: (x[0], x[1]))
         self.board_ = Board(size, closed, rules)
         self.result = []
 
@@ -26,9 +27,9 @@ class Agent:
             if hold_state.win():
                 print("solved:")
                 hold_state.print_board()
-                break
+                return
             if hold_state.constraint_satisfied():
-                for i in self.board_.rules:
+                for i in self.rules:
                     if self.is_empty(i, hold_state):
                         for j in self.find_combinations(self.length(i), i[2]):
                             hold_perm = permutations(j)
@@ -37,19 +38,12 @@ class Agent:
                                 if hold_.constraint_satisfied():
                                     stack.append(hold_)
                         break
-                    # if i[0] == 6 and i[1] == 1:
-                    #     print(self.is_empty(i, hold_state))
-                    #     input("?")
         print("unable to solve!")
 
     def new_state(self, matrix, size, rule, set_):
         d = 1
         new_board = Board(size, copy.copy(self.board_.closed), copy.copy(self.board_.rules))
         new_board.num_matrix = np.copy(matrix)
-        # print(rule)
-        # print(self.length(rule))
-        # print(set_)
-        # input("?")
         if rule[3] == 1:
             for i in set_:
                 new_board.num_matrix[rule[0]][rule[1] + d] = i
@@ -58,7 +52,6 @@ class Agent:
             for i in set_:
                 new_board.num_matrix[rule[0] + d][rule[1]] = i
                 d += 1
-        # new_board.print_board()
         return new_board
 
     def find_combinations(self, n, m):
