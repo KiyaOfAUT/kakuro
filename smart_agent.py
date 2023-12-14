@@ -27,16 +27,15 @@ class Agent:
                 print("\033[92mSolved:\033[0m")
                 hold_state.print_board()
                 return
-            if hold_state.constraint_satisfied():
-                for i in self.rules:
-                    if self.is_empty(i, hold_state):
-                        for j in self.find_combinations(self.length(i), i[2]):
-                            hold_perm = permutations(j)
-                            for k in hold_perm:
-                                hold_ = self.new_state(hold_state.num_matrix, hold_state.size, i, k)
-                                if hold_.constraint_satisfied():
-                                    stack.append(hold_)
-                        break
+            for i in self.rules:
+                if self.is_empty(i, hold_state):
+                    for j in self.find_combinations(self.length(i), i[2]):
+                        hold_perm = permutations(j)
+                        for k in hold_perm:
+                            hold_ = self.new_state(hold_state.num_matrix, hold_state.size, i, k)
+                            if hold_.constraint_satisfied():
+                                stack.append(hold_)
+                    break
         print("unable to solve!")
 
     def new_state(self, matrix, size, rule, set_):
